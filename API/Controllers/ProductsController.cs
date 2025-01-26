@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-
 public class ProductsController(IGenericRepository<Product> repo) : BaseApiController
 {
     [HttpGet]
@@ -16,7 +15,7 @@ public class ProductsController(IGenericRepository<Product> repo) : BaseApiContr
         var spec = new ProductSpecification(specParams);
 
         return await CreatePagedResult(repo, spec, specParams.PageIndex, specParams.PageSize);
-    } 
+    }  
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Product>> GetProduct(int id)
