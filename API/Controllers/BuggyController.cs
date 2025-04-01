@@ -34,5 +34,4 @@ public class BuggyController : BaseApiController
     public IActionResult GetValidationError(CreateProductDto product){
         return Ok();
     }
-    
 }
