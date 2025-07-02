@@ -1,4 +1,5 @@
 using API.Middleware;
+using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
@@ -23,6 +24,10 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(config => {
     return ConnectionMultiplexer.Connect(configuration);
 });
 builder.Services.AddSingleton<ICartService, CartService>();
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<AppUser>()
+    .AddEntityFrameworkStores<StoreContext>(); 
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 var app = builder.Build();
 
@@ -30,11 +35,13 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors(policy => {
-    policy.AllowAnyHeader().AllowAnyMethod()
+    policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials()
         .WithOrigins("https://localhost:4200", "http://localhost:4200");
 });
 
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<AppUser>();
+app.MapIdentityApi<AppUser>();
 
 try{
     using var scope = app.Services.CreateScope();
