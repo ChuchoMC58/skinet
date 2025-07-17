@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20250705044739_OrderAggregateAdded")]
+    partial class OrderAggregateAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,10 +427,10 @@ namespace Infrastructure.Migrations
                             b1.Property<int>("ExpMonth")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("ExpYear")
+                            b1.Property<int>("Last4")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("Last4")
+                            b1.Property<int>("Year")
                                 .HasColumnType("int");
 
                             b1.HasKey("OrderId");
@@ -438,7 +441,7 @@ namespace Infrastructure.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.OwnsOne("Core.Entities.OrderAggregate.ShippingAddress", "ShippingAddress", b1 =>
+                    b.OwnsOne("Core.Entities.OrderAggregate.ShippingAddress", "shippingAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
@@ -480,10 +483,10 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("DeliveryMethod");
 
-                    b.Navigation("ShippingAddress")
+                    b.Navigation("paymentSummary")
                         .IsRequired();
 
-                    b.Navigation("paymentSummary")
+                    b.Navigation("shippingAddress")
                         .IsRequired();
                 });
 
